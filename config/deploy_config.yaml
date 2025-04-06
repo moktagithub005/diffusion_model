@@ -1,0 +1,58 @@
+# Hail Detection System - Deployment Configuration
+
+# Model settings
+model:
+  path: "../models/checkpoints/optimized_model.pth"  # Path to optimized model
+  type: "integrated"  # Model type: "integrated", "ensemble", "dgmr", "steamcast"
+  quantized: true  # Whether the model is quantized for the Pi
+
+# Data settings
+data:
+  source: "weather_api"  # Data source: "weather_api", "local_file", "nexrad", "demo"
+  api_key: "your_api_key_here"  # API key for weather data (if using weather_api)
+  location: "your_location"  # Location for weather data (if using weather_api)
+  cache_dir: "./data/cache"  # Directory to cache radar data
+  input_seq_len: 4  # Number of input frames
+  frame_interval_minutes: 5  # Interval between radar frames in minutes
+
+# Detection settings
+detection:
+  threshold: 0.6  # Threshold for hail detection
+  consecutive_detections: 2  # Number of consecutive detections required
+  interval_seconds: 60  # Interval between detection runs
+  min_confidence: 0.4  # Minimum confidence required for logging
+
+# Protection settings
+protection:
+  duration_minutes: 30  # Duration to keep protection active
+  cooldown_minutes: 10  # Cooldown period after protection
+  auto_retract: true  # Automatically retract after duration
+
+# ESP module settings
+esp:
+  ip_address: "192.168.1.100"  # IP address of ESP module
+  port: 8080  # Port for ESP communication
+  protocol: "http"  # Protocol: "http" or "socket"
+  timeout: 5  # Connection timeout in seconds
+  retry_attempts: 3  # Number of retry attempts
+
+# Logging settings
+logging:
+  level: "INFO"  # Logging level: "DEBUG", "INFO", "WARNING", "ERROR"
+  file: "./logs/hail_detection.log"  # Log file path
+  max_size_mb: 10  # Maximum log file size
+  backup_count: 5  # Number of backup log files
+
+# Visualization settings
+visualization:
+  enabled: true  # Whether to save visualizations
+  path: "./visualizations"  # Directory to save visualizations
+  dpi: 150  # DPI for saved images
+  frame_rate: 2  # Frame rate for video generation
+
+# System settings
+system:
+  cpu_limit: 80  # Maximum CPU usage percentage
+  memory_limit: 80  # Maximum memory usage percentage
+  startup_delay: 10  # Delay in seconds before starting the service
+  watchdog_enabled: true  # Enable watchdog for system monitoring
