@@ -1,5 +1,9 @@
 import streamlit as st
-import torch
+try:
+    import torch
+except Exception:
+    # Torch not available in the environment; allow the app to continue without it.
+    torch = None
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -1044,13 +1048,19 @@ with tabs[2]:
             memory_info = psutil.virtual_memory()
             
             st.markdown(f"CPU Usage: {cpu_percent}%")
-            st.markdown(f"Memory Usage: {memory_info.percent}%")
-        except:
-            st.markdown("System resource info not available")
-        
         # Device info
         import platform
         st.markdown(f"System: {platform.system()} {platform.version()}")
+        st.markdown(f"Python: {platform.python_version()}")
+        if torch is not None:
+            try:
+                st.markdown(f"Torch: {torch.__version__}")
+            except Exception:
+                st.markdown("Torch: installed (version unknown)")
+        else:
+            st.markdown("Torch: not installed")
+        
+        st.markdown("</div>", unsafe_allow_html=True)
         st.markdown(f"Python: {platform.python_version()}")
         st.markdown(f"Torch: {torch.__version__}")
         
