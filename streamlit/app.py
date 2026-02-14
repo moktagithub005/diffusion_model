@@ -14,15 +14,25 @@ import pandas as pd
 from datetime import datetime
 from PIL import Image
 from matplotlib.animation import FuncAnimation
-from IPython.display import HTML
+# Note: IPython.display.HTML not needed for Streamlit deployment
 from matplotlib.colors import ListedColormap
 
 # Add parent directory to path for module import
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import your model classes
-from models.integrated_model import IntegratedHailModel, EnsembleHailModel
-from deploy.raspberry_pi.esp_communication import ESPCommunicator
+try:
+    from models.integrated_model import IntegratedHailModel, EnsembleHailModel
+except ImportError:
+    # Models not available - create dummy classes for demo
+    IntegratedHailModel = None
+    EnsembleHailModel = None
+
+try:
+    from deploy.raspberry_pi.esp_communication import ESPCommunicator
+except ImportError:
+    # ESP communicator not available
+    ESPCommunicator = None
 
 # Constants
 MODEL_PATH = None  # Not using pre-trained weights for demo
@@ -1044,36 +1054,14 @@ with tabs[2]:
         # System resources
         try:
             import psutil
-            cpu_percent = psutil.cpu_percent()
-            memory_info = psutil.virtual_memory()
-            
+            cpu_percent = psutil.cpu_percent(interval=0.1)
+            mem = psutil.virtual_memory()
             st.markdown(f"CPU Usage: {cpu_percent}%")
+            st.markdown(f"Memory Usage: {mem.percent}%")
+        except Exception:
+            st.markdown("psutil: not available")
+
         # Device info
-        import platform
-        st.markdown(f"System: {platform.system()} {platform.version()}")
-        st.markdown(f"Python: {platform.python_version()}")
-        if torch is not None:
-            try:
-                st.markdown(f"Torch: {torch.__version__}")
-            except Exception:
-                st.markdown("Torch: installed (version unknown)")
-        else:
-            st.markdown("Torch: not installed")
-        
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown(f"Python: {platform.python_version()}")
-        st.markdown(f"Torch: {torch.__version__}")
-        
-        st.markdown("</div>", unsafe_allow_html=True)
-
-with tabs[3]:
-    show_roi_calculator()
-
-# Footer
-st.markdown("---")
-st.markdown(
-    "Hail Detection System - A project combining DGMR and SteamCast for reliable hail prediction"
-)
-
-if __name__ == "__main__":
-    pass
+        import platform as _platform
+        st.markdown(f"System: {_platform.system()} {_platform.release()}")
+        st.markdown(f"Python: {_platform.python_version()}")

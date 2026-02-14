@@ -1,0 +1,14 @@
+# Lightweight version for Streamlit Cloud (no PyTorch)
+# Use this if your app can run without torch or if you're doing demo/visualization only
+
+streamlit>=1.20.0
+numpy>=1.23.0
+pandas>=1.5.0
+matplotlib>=3.5.0
+Pillow>=9.0.0
+psutil>=5.9.0
+scikit-learn>=1.1.0
+xarray>=2022.11.0
+netCDF4>=1.6.0
+PyYAML>=6.0
+requests>=2.28.0
