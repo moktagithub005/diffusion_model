@@ -1,18 +1,21 @@
-# Core dependencies for Streamlit Cloud
+# Core Streamlit dependencies
 streamlit>=1.20.0
+
+# Numerical computing
 numpy>=1.23.0
 pandas>=1.5.0
-matplotlib>=3.5.0
-Pillow>=9.0.0
+
+# Visualization (with version constraints for Streamlit Cloud)
+matplotlib>=3.5.0,<3.9.0
+pillow>=9.0.0
+
+# System monitoring
 psutil>=5.9.0
 
-# PyTorch (CPU version for Streamlit Cloud - GPU not available)
-# Use --index-url https://download.pytorch.org/whl/cpu for faster install
+# Machine Learning (optional - comment out if not needed)
 torch>=2.0.0
 torchvision>=0.15.0
 torchaudio>=2.0.0
-
-# Additional ML dependencies
 pytorch-lightning>=1.8.0
 scikit-learn>=1.1.0
 
