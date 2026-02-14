@@ -326,13 +326,8 @@ def create_radar_sweep_animation(data, fig_size=(12, 3)):
         return images + [line for ax in axes for line in ax.lines] + [patch for ax in axes for patch in ax.patches]
     
     # Create animation
-    from matplotlib.animation import FuncAnimation
     ani = FuncAnimation(fig, update, frames=60, interval=50, blit=True)
-    
-    # Convert to HTML for Streamlit
-    from IPython.display import HTML
     plt.close()
-    
     return ani
 
 def compare_model_predictions(data, threshold=0.5, fig_size=(15, 8)):
