@@ -5,7 +5,15 @@ except Exception:
     # Torch not available in the environment; allow the app to continue without it.
     torch = None
 import numpy as np
-import matplotlib.pyplot as plt
+# matplotlib may not be available in some environments (e.g., minimal containers or CI).
+# Try to set a non-interactive backend and import pyplot; if that fails, fall back to None
+# so the app can handle the absence of matplotlib and provide informative errors.
+try:
+    import matplotlib
+    matplotlib.use('Agg')  # Non-interactive backend suitable for server environments
+    import matplotlib.pyplot as plt
+except Exception:
+    plt = None
 import time
 import os
 import io
