@@ -5,7 +5,6 @@ except Exception:
     # Torch not available in the environment; allow the app to continue without it.
     torch = None
 import numpy as np
-import matplotlib.pyplot as plt
 import time
 import os
 import io
@@ -13,9 +12,21 @@ import sys
 import pandas as pd
 from datetime import datetime
 from PIL import Image
-from matplotlib.animation import FuncAnimation
-# Note: IPython.display.HTML not needed for Streamlit deployment
-from matplotlib.colors import ListedColormap
+# Matplotlib is required for the visualizations below. If it's missing in
+# Streamlit Cloud, show a clear error instead of crashing at import time.
+try:
+    import matplotlib.pyplot as plt
+    from matplotlib.animation import FuncAnimation
+    # Note: IPython.display.HTML not needed for Streamlit deployment
+    from matplotlib.colors import ListedColormap
+    MATPLOTLIB_AVAILABLE = True
+    MATPLOTLIB_IMPORT_ERROR = None
+except Exception as e:
+    plt = None
+    FuncAnimation = None
+    ListedColormap = None
+    MATPLOTLIB_AVAILABLE = False
+    MATPLOTLIB_IMPORT_ERROR = e
 
 # Add parent directory to path for module import
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -45,6 +56,20 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# Guardrail for Streamlit Cloud environments missing matplotlib.
+if not MATPLOTLIB_AVAILABLE:
+    st.error(
+        "Matplotlib is not available in this environment. "
+        "This app requires matplotlib for all visualizations."
+    )
+    st.info(
+        "On Streamlit Cloud, make sure `matplotlib` is included in "
+        "`requirements.txt` (or the requirements file configured for the app)."
+    )
+    if MATPLOTLIB_IMPORT_ERROR is not None:
+        st.code(str(MATPLOTLIB_IMPORT_ERROR))
+    st.stop()
 
 # Custom CSS
 st.markdown("""
